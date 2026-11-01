@@ -1,0 +1,8 @@
+{% macro sev(s) %}<span class="badge {{ s|band }}">{{ s|band }} {{ '%.1f'|format(s) }}</span>{% endmacro %}
+{% macro st(s) %}<span class="badge st">{{ s }}</span>{% endmacro %}
+{% macro csrf() %}<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">{% endmacro %}
+{% macro ftable(rows) %}<div class="wrap"><table><tr><th>R</th><th>Severity</th><th>Asset</th><th>CVE / Title</th><th>Status</th><th>Owner</th><th>Due</th></tr>
+{% for r in rows %}<tr><td><b>{{ r.priority }}</b></td><td>{{ sev(r.severity) }}</td><td><a href="{{ url_for('main.asset_detail', aid=r.asset_id) }}">{{ r.asset_name }}</a> <span class="mut">A={{ r.criticality }}{% if r.internet_exposed %} 🌐{% endif %}</span></td>
+<td><a href="{{ url_for('main.finding_detail', fid=r.id) }}">{{ r.cve_id or '' }} {{ r.title }}</a></td><td>{{ st(r.status) }}</td><td>{{ r.assignee or '—' }}</td>
+<td class="{{ 'overdue' if r.status in ('Open','In Progress') and r.due_date and r.due_date < today_iso() }}">{{ r.due_date or '—' }}</td></tr>
+{% else %}<tr><td colspan="7" class="mut">No findings.</td></tr>{% endfor %}</table></div>{% endmacro %}

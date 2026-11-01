@@ -1,0 +1,4 @@
+{% extends "base.html" %}{% block title %}Scans{% endblock %}
+{% block body %}<h1>Scan history</h1><div class="card wrap"><table><tr><th>#</th><th>File</th><th>Kind</th><th>Rows</th><th>New</th><th>Duplicates</th><th>Rejected</th><th>Verified</th><th>By</th><th>When (UTC)</th></tr>
+{% for s in rows %}<tr><td>{{ s.id }}</td><td>{{ s.filename }}</td><td>{{ s.kind }} {{ s.fmt or '' }}</td><td>{{ s.total_rows }}</td><td>{{ s.imported }}</td><td>{{ s.duplicates }}</td><td>{{ s.rejected }}</td><td>{{ s.verified_resolved }}</td><td>{{ s.username or '—' }}</td><td>{{ s.created_at }}</td></tr>
+{% else %}<tr><td colspan="10" class="mut">No scans yet.</td></tr>{% endfor %}</table></div>{% endblock %}

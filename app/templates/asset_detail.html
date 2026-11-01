@@ -1,0 +1,8 @@
+{% extends "base.html" %}{% import "_macros.html" as m %}{% block title %}{{ a.name }}{% endblock %}
+{% block body %}<h1>{{ a.name }}</h1><div class="grid g4">
+<div class="card kpi"><div class="n">{{ a.criticality }}</div><div class="l">Criticality (A)</div></div>
+<div class="card kpi bad"><div class="n">{{ '%.1f'|format(risk) }}</div><div class="l">Asset risk (Σ R of open)</div></div>
+<div class="card"><b>{{ a.asset_type }}</b><br><span class="mut">{{ a.os or 'OS n/a' }}<br>{{ a.ip or 'no IP' }}<br>Owner: {{ a.owner or '—' }}<br>{{ '🌐 Internet-exposed' if a.internet_exposed else 'Internal' }}</span></div></div><br>
+{% if user.role != 'viewer' %}<p class="noprint"><a class="btn sec" href="{{ url_for('main.asset_edit', aid=a.id) }}">Edit</a>
+{% if user.role == 'admin' %}<form method="post" action="{{ url_for('main.asset_delete', aid=a.id) }}" style="display:inline" onsubmit="return confirm('Delete asset and all its findings?')">{{ m.csrf() }}<button class="danger">Delete</button></form>{% endif %}</p>{% endif %}
+<div class="card"><h2>Findings on this asset</h2>{{ m.ftable(rows) }}</div>{% endblock %}

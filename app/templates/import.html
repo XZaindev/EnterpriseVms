@@ -1,0 +1,9 @@
+{% extends "base.html" %}{% import "_macros.html" as m %}{% block title %}Import{% endblock %}
+{% block body %}<h1>Import scan results</h1><form method="post" enctype="multipart/form-data" class="card" style="max-width:600px">{{ m.csrf() }}
+<label>CSV or JSON file (max 2 MB)</label><input type="file" name="file" accept=".csv,.json" required>
+<p class="mut">Columns: asset (name or IP), severity (1–10 or Critical/High/Medium/Low), title, cve, description, source, epss. Assets must be registered first.</p>
+<label class="inline"><input type="checkbox" name="auto_verify"> Rescan verification: mark open findings on the assets in this file as Resolved if they no longer appear (only use with a complete rescan)</label>
+<p><button>Import</button></p></form>
+{% if result %}<br><div class="card"><h2>Result</h2><p>Rows: <b>{{ result.total }}</b> · New findings: <b>{{ result.imported }}</b> · Duplicates (not re-created): <b>{{ result.duplicates }}</b>
+· Reopened: <b>{{ result.reopened }}</b> · Verified resolved: <b>{{ result.verified }}</b> · Rejected: <b>{{ result.rejected|length }}</b></p>
+{% if result.rejected %}<div class="wrap"><table><tr><th>Line / item</th><th>Reason</th></tr>{% for l,why in result.rejected %}<tr><td>{{ l }}</td><td>{{ why }}</td></tr>{% endfor %}</table></div>{% endif %}</div>{% endif %}{% endblock %}

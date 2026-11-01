@@ -1,0 +1,7 @@
+{% extends "base.html" %}{% block title %}Assets{% endblock %}
+{% block body %}<h1>Assets</h1><form class="row noprint"><div><input name="q" placeholder="Search name / IP / owner" value="{{ q }}"></div>
+<div class="fit"><button>Search</button></div>{% if user.role != 'viewer' %}<div class="fit"><a class="btn sec" href="{{ url_for('main.asset_new') }}">+ Register asset</a></div>{% endif %}</form><br>
+<div class="card wrap"><table><tr><th>Name</th><th>IP</th><th>Type</th><th>OS</th><th>A</th><th>Exposed</th><th>Owner</th><th>Open</th><th>Risk</th></tr>
+{% for a in rows %}<tr><td><a href="{{ url_for('main.asset_detail', aid=a.id) }}">{{ a.name }}</a></td><td>{{ a.ip or '—' }}</td><td>{{ a.asset_type }}</td><td>{{ a.os or '—' }}</td>
+<td><b>{{ a.criticality }}</b></td><td>{{ '🌐 yes' if a.internet_exposed else 'no' }}</td><td>{{ a.owner or '—' }}</td><td>{{ a.open_count }}</td><td><b>{{ '%.1f'|format(a.risk) }}</b></td></tr>
+{% else %}<tr><td colspan="9" class="mut">No assets.</td></tr>{% endfor %}</table></div>{% endblock %}

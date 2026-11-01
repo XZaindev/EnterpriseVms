@@ -1,0 +1,3 @@
+Flask>=3.0
+reportlab>=4.0   # optional: only needed for PDF export
+gunicorn>=21.2.0

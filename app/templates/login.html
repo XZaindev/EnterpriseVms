@@ -1,0 +1,4 @@
+{% extends "base.html" %}{% import "_macros.html" as m %}{% block title %}Login{% endblock %}
+{% block body %}<div class="card login"><h1>🛡️ EnterpriseVMS</h1><form method="post">{{ m.csrf() }}
+<label>Username</label><input name="username" autofocus required><label>Password</label><input name="password" type="password" required>
+<p><button style="width:100%">Sign in</button></p></form></div>{% endblock %}

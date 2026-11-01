@@ -1,0 +1,9 @@
+{% extends "base.html" %}{% import "_macros.html" as m %}{% block title %}Vulnerabilities{% endblock %}
+{% block body %}<h1>Vulnerabilities <span class="mut" style="font-size:14px">sorted by priority R = S × A</span></h1>
+<form class="row noprint card"><div><label>Status</label><select name="status"><option value="active" {{ 'selected' if f.status=='active' }}>Active (Open + In Progress)</option>
+<option value="all" {{ 'selected' if f.status=='all' }}>All</option>{% for s in STATUSES %}<option {{ 'selected' if f.status==s }}>{{ s }}</option>{% endfor %}</select></div>
+<div><label>Severity</label><select name="severity"><option value="">Any</option>{% for s in ['Critical','High','Medium','Low'] %}<option {{ 'selected' if f.severity==s }}>{{ s }}</option>{% endfor %}</select></div>
+<div><label>Search</label><input name="q" value="{{ f.q }}" placeholder="CVE / title / asset"></div>
+{% if aid %}<input type="hidden" name="asset" value="{{ aid }}">{% endif %}<div class="fit"><button>Filter</button></div>
+<div class="fit"><a class="btn sec" href="{{ url_for('main.report_csv', status=f.status) }}">Export CSV</a></div></form><br>
+<div class="card">{{ m.ftable(rows) }}</div>{% endblock %}

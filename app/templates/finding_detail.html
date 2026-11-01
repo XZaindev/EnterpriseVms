@@ -1,0 +1,19 @@
+{% extends "base.html" %}{% import "_macros.html" as m %}{% block title %}Finding #{{ f.id }}{% endblock %}
+{% block body %}<h1>{{ f.cve_id or '' }} {{ f.title }}</h1><div class="grid g4">
+<div class="card kpi bad"><div class="n">{{ f.priority }}</div><div class="l">Priority R = {{ f.severity }} × {{ f.criticality }}</div></div>
+<div class="card kpi"><div class="n">{{ f.priority_adj }}</div><div class="l">Adjusted (exposure/EPSS)</div></div>
+<div class="card"><b>{{ m.sev(f.severity) }}</b> {{ m.st(f.status) }}<br><span class="mut">Source: {{ f.source or '—' }}{% if f.epss is not none %}<br>EPSS: {{ f.epss }}{% endif %}</span></div>
+<div class="card"><a href="{{ url_for('main.asset_detail', aid=f.asset_id) }}">{{ f.asset_name }}</a> <span class="mut">A={{ f.criticality }}<br>{{ f.ip or '' }}{% if f.internet_exposed %} 🌐{% endif %}</span><br>
+<span class="mut">First seen {{ f.first_seen }} · last seen {{ f.last_seen }}</span></div></div><br>
+{% if f.description %}<div class="card"><h2>Description</h2>{{ f.description }}</div><br>{% endif %}
+<div class="grid g2"><div class="card"><h2>Remediation</h2>
+{% if user.role != 'viewer' %}<form method="post" action="{{ url_for('main.finding_update', fid=f.id) }}">{{ m.csrf() }}
+<label>Status</label><select name="status">{% for s in STATUSES %}<option {{ 'selected' if f.status==s }}>{{ s }}</option>{% endfor %}</select>
+<label>Responsible person</label><input name="assignee" value="{{ f.assignee or '' }}">
+<label>Due date</label><input type="date" name="due_date" value="{{ f.due_date or '' }}">
+<label>Corrective action / justification (required for Risk Accepted)</label><textarea name="action" rows="4">{{ f.action or '' }}</textarea>
+<p><button>Save</button></p></form>
+{% else %}<p>Status: {{ f.status }}<br>Owner: {{ f.assignee or '—' }}<br>Due: {{ f.due_date or '—' }}<br>Action: {{ f.action or '—' }}</p>{% endif %}
+{% if f.task_updated %}<p class="mut">Last update {{ f.task_updated }} {{ 'by ' ~ f.updated_by if f.updated_by }}</p>{% endif %}</div>
+<div class="card"><h2>Risk history</h2><div class="wrap"><table><tr><th>When</th><th>R</th><th>Reason</th></tr>
+{% for h in history %}<tr><td>{{ h.created_at }}</td><td>{{ h.score }}</td><td>{{ h.reason }}</td></tr>{% endfor %}</table></div></div></div>{% endblock %}

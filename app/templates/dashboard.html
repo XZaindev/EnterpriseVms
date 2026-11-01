@@ -1,0 +1,20 @@
+{% extends "base.html" %}{% import "_macros.html" as m %}{% block title %}Dashboard{% endblock %}
+{% block body %}<h1>Vulnerability Risk Dashboard</h1>
+<div class="grid g4"><div class="card kpi"><div class="n">{{ d.open }}</div><div class="l">Open vulnerabilities</div></div>
+<div class="card kpi bad"><div class="n">{{ d.critical_open }}</div><div class="l">Critical (open)</div></div>
+<div class="card kpi"><div class="n">{{ d.assets }}</div><div class="l">Registered assets</div></div>
+<div class="card kpi warn"><div class="n">{{ d.overdue }}</div><div class="l">Overdue tasks ({{ d.overdue_pct }}%)</div></div>
+<div class="card kpi good"><div class="n">{{ d.remediation_rate }}%</div><div class="l">Remediation rate</div></div>
+<div class="card kpi"><div class="n">{{ d.mttr_days if d.mttr_days is not none else '—' }}</div><div class="l">Mean time to remediate (days)</div></div></div><br>
+<div class="grid g2"><div class="card"><h2>Open vulnerabilities by severity</h2><div class="donut" style="background:{{ donut }}"></div><br>
+<div class="legend">{% for k,v in d.severity.items() %}<span><i style="background:{{ colors[k] }}"></i>{{ k }}: {{ v }}</span>{% endfor %}</div></div>
+<div class="card"><h2>Risk before vs after remediation (Σ R)</h2>
+<p>Before<div class="bar"><i style="width:100%;background:#e5484d"></i></div><b>{{ d.risk_before }}</b></p>
+<p>After<div class="bar"><i style="width:{{ (100*d.risk_after/d.risk_before) if d.risk_before else 0 }}%;background:#30a46c"></i></div><b>{{ d.risk_after }}</b>
+<span class="mut"> — reduced by {{ d.risk_reduction_pct }}%</span></p>
+<h2>Status</h2>{% for s,c in d.status_counts.items() %}<span class="mut">{{ s }}:</span> <b>{{ c }}</b> &nbsp;{% endfor %}</div></div><br>
+<div class="grid g2"><div class="card"><h2>Highest-risk assets</h2><div class="wrap"><table><tr><th>Asset</th><th>A</th><th>Open</th><th>Risk</th></tr>
+{% for a in top_assets %}<tr><td><a href="{{ url_for('main.asset_detail', aid=a.id) }}">{{ a.name }}</a></td><td>{{ a.criticality }}</td><td>{{ a.open_count }}</td><td><b>{{ '%.1f'|format(a.risk) }}</b></td></tr>
+{% else %}<tr><td colspan="4" class="mut">No assets yet.</td></tr>{% endfor %}</table></div></div>
+<div class="card"><h2>Overdue remediation</h2>{{ m.ftable(overdue) }}</div></div><br>
+<div class="card"><h2>Top priority vulnerabilities (R = S × A)</h2>{{ m.ftable(top_findings) }}<p><a href="{{ url_for('main.findings') }}">View all →</a></p></div>{% endblock %}

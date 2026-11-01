@@ -1,0 +1,8 @@
+{% extends "base.html" %}{% import "_macros.html" as m %}{% block title %}Report{% endblock %}
+{% block body %}<h1>Vulnerability &amp; Remediation Report <span class="mut" style="font-size:14px">{{ r.today }}</span></h1>
+<p class="noprint"><button onclick="window.print()">Print</button> <a class="btn sec" href="{{ url_for('main.report_csv') }}">CSV</a> <a class="btn sec" href="{{ url_for('main.report_pdf') }}">PDF</a></p>
+{% set s = r.summary %}<div class="card"><p>Open <b>{{ s.open }}</b> · Critical open <b>{{ s.critical_open }}</b> · Overdue <b>{{ s.overdue }}</b> · Resolved <b>{{ s.resolved }}</b> · Risk accepted <b>{{ s.accepted }}</b> ·
+Remediation rate <b>{{ s.remediation_rate }}%</b> · MTTR <b>{{ s.mttr_days if s.mttr_days is not none else '—' }}</b> days · Risk {{ s.risk_before }} → {{ s.risk_after }} (−{{ s.risk_reduction_pct }}%)</p>
+<p class="mut">Priority R = S × A is an educational triage score, not a complete measure of real-world risk.</p></div><br>
+<div class="card"><h2>Still needs remediation (by priority)</h2>{{ m.ftable(r.open) }}</div><br>
+<div class="card"><h2>Fixed</h2>{{ m.ftable(r.resolved) }}</div><br><div class="card"><h2>Accepted risks</h2>{{ m.ftable(r.accepted) }}</div>{% endblock %}

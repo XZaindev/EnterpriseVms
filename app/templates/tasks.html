@@ -1,0 +1,5 @@
+{% extends "base.html" %}{% import "_macros.html" as m %}{% block title %}Tasks{% endblock %}
+{% block body %}<h1>Remediation tasks</h1><div class="card wrap"><table><tr><th>R</th><th>Asset</th><th>Vulnerability</th><th>Status</th><th>Responsible</th><th>Due</th><th>Action</th></tr>
+{% for r in rows %}<tr><td><b>{{ r.priority }}</b></td><td>{{ r.asset_name }}</td><td><a href="{{ url_for('main.finding_detail', fid=r.id) }}">{{ r.cve_id or '' }} {{ r.title }}</a></td><td>{{ m.st(r.status) }}</td>
+<td>{{ r.assignee or 'unassigned' }}</td><td class="{{ 'overdue' if r.due_date and r.due_date < today }}">{{ r.due_date or '—' }}{{ ' (overdue)' if r.due_date and r.due_date < today }}</td><td>{{ r.action or '—' }}</td></tr>
+{% else %}<tr><td colspan="7" class="mut">No active tasks.</td></tr>{% endfor %}</table></div>{% endblock %}

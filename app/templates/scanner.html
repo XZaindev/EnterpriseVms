@@ -1,0 +1,6 @@
+{% extends "base.html" %}{% import "_macros.html" as m %}{% block title %}Lab scanner{% endblock %}
+{% block body %}<h1>Limited lab scanner</h1><div class="card" style="max-width:620px"><p class="mut">TCP connect check of a few risky ports on a <b>registered</b> asset with a <b>private/loopback</b> IP. Public addresses are refused. Use only on your own authorised lab.</p>
+<form method="post">{{ m.csrf() }}<label>Asset</label><select name="asset_id">{% for a in rows %}<option value="{{ a.id }}">{{ a.name }} ({{ a.ip }})</option>{% endfor %}</select>
+<label class="inline"><input type="checkbox" name="confirm"> I am authorised to scan this lab asset</label><p><button>Run check</button></p></form></div>
+{% if out %}<br><div class="card"><h2>Result for {{ out.ip }}</h2>Open risky ports: <b>{{ out.open_ports or 'none' }}</b>
+{% if out.result %}<br>New findings: {{ out.result.imported }} · Already known: {{ out.result.duplicates }}{% endif %}</div>{% endif %}{% endblock %}

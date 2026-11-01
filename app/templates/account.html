@@ -1,0 +1,4 @@
+{% extends "base.html" %}{% import "_macros.html" as m %}{% block title %}Account{% endblock %}
+{% block body %}<h1>Change password</h1><form method="post" class="card" style="max-width:420px">{{ m.csrf() }}
+<label>Current password</label><input type="password" name="old" required><label>New password (min 10)</label><input type="password" name="new" required>
+<label>Confirm</label><input type="password" name="confirm" required><p><button>Change</button></p></form>{% endblock %}

@@ -1,0 +1,4 @@
+{% extends "base.html" %}{% import "_macros.html" as m %}{% block title %}Users{% endblock %}
+{% block body %}<h1>Users</h1><div class="grid g2"><div class="card wrap"><table><tr><th>User</th><th>Role</th><th>Created</th></tr>{% for u in rows %}<tr><td>{{ u.username }}</td><td>{{ u.role }}</td><td>{{ u.created_at }}</td></tr>{% endfor %}</table></div>
+<form method="post" class="card">{{ m.csrf() }}<h2>Add user</h2><label>Username</label><input name="username" required><label>Password (min 10 chars)</label><input name="password" type="password" required>
+<label>Role</label><select name="role">{% for r in ROLES %}<option>{{ r }}</option>{% endfor %}</select><p><button>Create</button></p></form></div>{% endblock %}

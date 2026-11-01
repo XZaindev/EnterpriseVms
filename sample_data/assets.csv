@@ -1,0 +1,8 @@
+name,ip,asset_type,os,criticality,internet_exposed,owner
+web-prod-01,10.0.0.10,Server,Ubuntu 22.04,5,yes,IT Ops
+db-prod-01,10.0.0.20,Database,Debian 12,5,no,DBA Team
+mail-gw,10.0.0.30,Server,Windows Server 2019,4,yes,IT Ops
+hr-pc-07,10.0.1.7,Workstation,Windows 11,2,no,HR
+dev-box-03,10.0.2.3,Workstation,Ubuntu 22.04,3,no,Dev Team
+core-switch,10.0.0.1,Network Device,Cisco IOS,4,no,Network Team
+file-srv,10.0.0.40,Server,Windows Server 2016,4,no,IT Ops

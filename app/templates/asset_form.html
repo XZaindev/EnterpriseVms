@@ -1,0 +1,11 @@
+{% extends "base.html" %}{% import "_macros.html" as m %}{% block title %}{{ title }}{% endblock %}
+{% block body %}<h1>{{ title }}</h1><form method="post" class="card" style="max-width:560px">{{ m.csrf() }}
+<label>Name *</label><input name="name" value="{{ a.name or '' }}" required maxlength="120">
+<label>IP address</label><input name="ip" value="{{ a.ip or '' }}">
+<label>Type</label><select name="asset_type">{% for t in ASSET_TYPES %}<option {{ 'selected' if a.asset_type == t }}>{{ t }}</option>{% endfor %}</select>
+<label>Operating system</label><input name="os" value="{{ a.os or '' }}">
+<label>Criticality to the organisation (A: 1 = low … 5 = critical) *</label>
+<select name="criticality">{% for i in range(1,6) %}<option value="{{ i }}" {{ 'selected' if a.criticality|int == i }}>{{ i }}</option>{% endfor %}</select>
+<label>Owner</label><input name="owner" value="{{ a.owner or '' }}">
+<label class="inline"><input type="checkbox" name="internet_exposed" {{ 'checked' if a.internet_exposed in (1,'on','1') }}> Exposed to the Internet</label>
+<p><button>Save</button> <a class="btn sec" href="{{ url_for('main.assets') }}">Cancel</a></p></form>{% endblock %}
